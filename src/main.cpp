@@ -17,7 +17,6 @@
 #define POLL_INTERVAL 100
 #define MAX_SERVER_LOOP 600
 
-#include "netpacket.cpp"
 #include "web.cpp"
 
 using namespace std;
@@ -49,7 +48,7 @@ void main_server_process() {
   for (int eventCount = 0; eventCount >= 0; eventCount = poll(server_file_descriptor, 1, POLL_INTERVAL)) {
     if (eventCount > 0) {
       int client_socket = accept(server_socket, nullptr, nullptr);
-      char buffer[1024] = {0};
+      char buffer[2048] = {0};
 
       recv(client_socket, buffer, sizeof(buffer), 0);
       string response_string = webserver(client_socket, buffer, sizeof(buffer));

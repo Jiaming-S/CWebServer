@@ -1,12 +1,20 @@
 // net.cpp
-// Provides helper structs and functions for main 
+// Provides helper structs and functions for web 
 
 #include <string>
 
 #define CRLF "\r\n"
 #define LF   "\n"
+#define DELIMITER "\r\n\r\n"
 
 using namespace std;
+
+
+struct reql {
+  string method;
+  string target;
+  string http_ver;
+};
 
 
 struct packet {
@@ -19,7 +27,7 @@ struct packet {
     this->content = string();
     this->header_len = 0;
     this->body_len = 0;
-  } 
+  }
 
   packet* append_header (string str) {
     string header = this->content.substr(0, header_len);
@@ -31,7 +39,7 @@ struct packet {
     return this;
   }
 
-  packet* append_body (string str) {
+  packet* append_message (string str) {
     if (body_len == 0) {
       this->content.append(CRLF);
       this->header_len++;
@@ -41,9 +49,10 @@ struct packet {
     this->body_len += str.length();
 
     return this;
-  } 
+  }
 
   string get_content() {
     return this->content;
   }
 };
+
