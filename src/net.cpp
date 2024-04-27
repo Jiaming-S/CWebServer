@@ -46,8 +46,8 @@ struct packet {
       this->header_len++;
     }
 
-    this->content.append(str);
-    this->body_len += str.length();
+    this->content.append(str).append(CRLF);
+    this->body_len += str.length() + 2;
 
     return this;
   }
@@ -58,7 +58,6 @@ struct packet {
 
     while (fin) {
       string cur_line;
-      cout << "Reading file: " << cur_line << endl;
       getline(fin, cur_line);
       this->append_message(cur_line);
     }
