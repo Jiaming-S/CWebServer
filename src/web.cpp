@@ -2,16 +2,16 @@
 // Represents the website to be served and builds ontop of main
 
 
+#include <iostream>
 #include <string>
-
-#include "net.cpp"
-#include "pack.cpp"
 
 #define GET_HTML 1
 #define GET_JS 2
 #define GET_CSS 3
 #define GET_OTHER 0
-#define UNKNOWN_REQUEST -1
+#define UNKNOWN_METHOD -1
+
+#include "net.cpp"
 
 using namespace std;
 
@@ -32,31 +32,28 @@ int classify_request(char request[]) {
       return GET_HTML;
     }
     else {
+      cout << "Unknown Target: " << cur_request.target << endl;
       return GET_OTHER;
     }
   }
   else {
-    return UNKNOWN_REQUEST;
+    cout << "Unknown Method: " << cur_request.method << endl;
+    return UNKNOWN_METHOD;
   }
 }
 
 string webserver(int client_socket, char request[], size_t request_size) {
   packet* result_packet = new packet;
 
+  cout << endl << "Incoming Request..." << endl;
   int request_code = classify_request(request);
-  cout << "Incoming Request with code: " << request_code << endl;
+  cout << "Code: " << request_code << endl;
 
   if (request_code == GET_HTML) {
     result_packet
       ->append_header("HTTP/1.1 200 OK")
       ->append_header("Content-Type: text/html; charset=utf-8")
-      ->append_message("<!DOCTYPE html>")
-      ->append_message("<body>")
-      ->append_message("<main>")
-      ->append_message("<h1>Example Page</h1>")
-      ->append_message("<p>Hi</p>")
-      ->append_message("</main>")
-      ->append_message("</body>");
+      ->pack("./assets/site.html");
   }
 
   return result_packet->get_content();

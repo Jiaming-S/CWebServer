@@ -2,6 +2,7 @@
 // Provides helper structs and functions for web 
 
 #include <string>
+#include <fstream>
 
 #define CRLF "\r\n"
 #define LF   "\n"
@@ -49,6 +50,18 @@ struct packet {
     this->body_len += str.length();
 
     return this;
+  }
+
+  void pack(string filepath) {
+    ifstream fin(filepath);
+    if (!fin.is_open()) return;
+
+    while (fin) {
+      string cur_line;
+      cout << "Reading file: " << cur_line << endl;
+      getline(fin, cur_line);
+      this->append_message(cur_line);
+    }
   }
 
   string get_content() {
