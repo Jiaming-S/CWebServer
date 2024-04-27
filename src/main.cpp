@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <thread>
 
-#include <assert.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -18,7 +17,7 @@
 #define POLL_INTERVAL 100
 #define MAX_SERVER_LOOP 600
 
-#include "net.cpp"
+#include "netpacket.cpp"
 #include "web.cpp"
 
 using namespace std;
@@ -34,7 +33,7 @@ sockaddr_in get_lan_addr_in(int port) {
 }
 
 void main_server_process() {
-  cout << "Starting" << endl; 
+  cout << "Starting..." << endl; 
 
   int server_socket = socket(AF_INET, SOCK_STREAM, 0); 
   sockaddr_in server_address = get_lan_addr_in(PORT_NUMBER);
@@ -53,31 +52,16 @@ void main_server_process() {
       char buffer[1024] = {0};
 
       recv(client_socket, buffer, sizeof(buffer), 0);
-      cout << "Received Request" << endl;
+      string response_string = webserver(client_socket, buffer, sizeof(buffer));
 
-      packet* result_packet = new packet;
-      result_packet
-        ->append_header("HTTP/2 200 OK")
-        ->append_header("Content-Type: text/html; charset=utf-8")
-        ->append_body("<!DOCTYPE html>")
-        ->append_body("<body>")
-        ->append_body("<main>")
-        ->append_body("<h1>Example Page</h1>")
-        ->append_body("<p>Hi</p>")
-        ->append_body("</main>")
-        ->append_body("</body>");  
-
-      string response_string = result_packet->get_content();
       send(client_socket, response_string.c_str(), response_string.length(), 0);
       close(client_socket);
-      cout << "Sent Response" << endl;
+      cout << "Finished Request." << endl;
     }
   }
-
   
   close(server_socket);
-
-  cout << "Done" << endl;
+  cout << "Done." << endl;
 }
 
 int main () {
