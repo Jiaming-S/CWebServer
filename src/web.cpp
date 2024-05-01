@@ -6,8 +6,8 @@
 #include <string>
 
 #define GET_HTML 1
-#define GET_JS 2
-#define GET_CSS 3
+#define GET_CSS 2
+#define GET_JS 3
 #define GET_OTHER 0
 #define UNKNOWN_METHOD -1
 
@@ -31,6 +31,15 @@ int classify_request(char request[]) {
     if (cur_request.target == "/") {
       return GET_HTML;
     }
+    else if (cur_request.target == "/index.html") {
+      return GET_HTML;
+    }
+    else if (cur_request.target == "/styles.css") {
+      return GET_CSS;
+    }
+    else if (cur_request.target == "/scripts.js") {
+      return GET_JS;
+    }
     else {
       cout << "Unknown Target: " << cur_request.target << endl;
       return GET_OTHER;
@@ -43,21 +52,31 @@ int classify_request(char request[]) {
 }
 
 string webserver(int client_socket, char request[], size_t request_size) {
-  packet* result_packet = new packet;
-
   cout << endl << "Incoming Request..." << endl;
+
   int request_code = classify_request(request);
   cout << "Code: " << request_code << endl;
 
+  packet* result_packet = new packet;
   if (request_code == GET_HTML) {
     result_packet
       ->append_header("HTTP/1.1 200 OK")
       ->append_header("Content-Type: text/html; charset=utf-8")
       ->pack("./assets/site.html");
   }
+  else if (request_code == GET_CSS) {
+    result_packet
+      ->append_header("HTTP/1.1 200 OK")
+      ->append_header("Content-Type: text/css; charset=utf-8")
+      ->pack("./assets/styles.css");
+  }
+    else if (request_code == GET_JS) {
+    result_packet
+      ->append_header("HTTP/1.1 200 OK")
+      ->append_header("Content-Type: application/javascript; charset=utf-8")
+      ->pack("./assets/scripts.js");
+  }
 
   return result_packet->get_content();
 }
-
-
 
