@@ -34,7 +34,7 @@ sockaddr_in get_lan_addr_in(int port) {
 void main_server_process() {
   cout << "Starting..." << endl; 
 
-  int server_socket = socket(AF_INET, SOCK_STREAM, 0); 
+  int server_socket = socket(AF_INET, SOCK_STREAM, 0);
   sockaddr_in server_address = get_lan_addr_in(PORT_NUMBER);
 
   bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address));
@@ -64,6 +64,7 @@ void main_server_process() {
 }
 
 int main () {
+  build_request_cache();
   main_server_process();
   return 0;
 }
