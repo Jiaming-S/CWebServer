@@ -51,9 +51,10 @@ void main_server_process() {
       char buffer[2048] = {0};
 
       recv(client_socket, buffer, sizeof(buffer), 0);
-      string response_string = webserver(client_socket, buffer, sizeof(buffer));
 
+      string response_string = webserver(client_socket, buffer, sizeof(buffer));
       send(client_socket, response_string.c_str(), response_string.length(), 0);
+
       close(client_socket);
       cout << "Finished Request." << endl;
     }

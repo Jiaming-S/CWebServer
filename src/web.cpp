@@ -20,6 +20,7 @@ void build_request_cache() {
     string cur_line;
     getline(fin, cur_line);
     if (cur_line[0] == '#') continue;
+    if (cur_line.length() <= 0) continue;
 
     int delim = cur_line.find('=');
 
@@ -28,8 +29,8 @@ void build_request_cache() {
     string path = mapping.substr(0, mapping.find(';'));
     string filetype = mapping.substr(mapping.find(';') + 1);
     
-    cout << "Built Request Path Pair: " << req << " " << path << endl;
-    cout << "Built Request Filetype Pair: " << req << " " << filetype << endl;
+    cout << "Built Request Path Pair: " << req << " --> " << path << endl;
+    cout << "Built Request Filetype Pair: " << req << " --> " << filetype << endl;
 
     request_to_path.insert(make_pair(req, path));
     request_to_filetype.insert(make_pair(req, filetype));
@@ -67,8 +68,19 @@ string webserver(int client_socket, char request[], size_t request_size) {
     else {
       result_packet
         ->append_header("HTTP/1.1 200 OK")
-        ->append_header("Content-Type: " + request_to_filetype[request_line->target])
-        ->pack(request_to_path[request_line->target]);
+        ->append_header("Content-Type: " + request_to_filetype[request_line->target]);
+      
+      // png
+      if (request_to_filetype[request_line->target] == "image/png") {
+        cout << "Packing PNG..." << endl;
+        result_packet->pack_image(request_to_path[request_line->target]);
+      }
+      
+      // general purpose / fallback
+      else {
+        cout << "Packing Contents..." << endl;
+        result_packet->pack(request_to_path[request_line->target]);
+      }
     }
   }
   else {

@@ -4,9 +4,9 @@
 /scripts.js=./public/scripts.js;application/javascript
 /meta.js=./public/meta.js;application/javascript
 /generate.js=./public/generate.js;application/javascript
-# /assets/images/super-1.png=./public/assets/images/super-1.png;image/png
-# /assets/images/super-2.png=./public/assets/images/super-2.png;image/png
-# /assets/images/super-3.png=./public/assets/images/super-3.png;image/png
-# /assets/images/super-4.png=./public/assets/images/super-4.png;image/png
-# /assets/images/super-5.png=./public/assets/images/super-5.png;image/png
-# /assets/images/supertf.png=./public/assets/images/supertf.png;image/png
+/assets/images/super-1.png=./public/assets/images/super-1.png;image/png
+/assets/images/super-2.png=./public/assets/images/super-2.png;image/png
+/assets/images/super-3.png=./public/assets/images/super-3.png;image/png
+/assets/images/super-4.png=./public/assets/images/super-4.png;image/png
+/assets/images/super-5.png=./public/assets/images/super-5.png;image/png
+/assets/images/supertf.png=./public/assets/images/supertf.png;image/png

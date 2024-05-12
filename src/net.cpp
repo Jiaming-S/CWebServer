@@ -40,27 +40,48 @@ struct packet {
     return this;
   }
 
-  packet* append_message (string str) {
+  packet* append_message (string str, string delimiter) {
     if (body_len == 0) {
-      this->content.append(CRLF);
+      this->content.append(delimiter);
       this->header_len++;
     }
 
-    this->content.append(str).append(CRLF);
+    this->content.append(str).append(delimiter);
     this->body_len += str.length() + 2;
 
     return this;
   }
 
-  void pack(string filepath) {
+  packet* pack(string filepath) {
     ifstream fin(filepath);
-    if (!fin.is_open()) return;
+    if (!fin.is_open()) return nullptr;
 
     while (fin) {
       string cur_line;
       getline(fin, cur_line);
-      this->append_message(cur_line);
+      this->append_message(cur_line, CRLF);
     }
+
+    return this;
+  }
+
+  packet* pack_image(string image_filepath) {
+    ifstream fin(image_filepath);
+    if (!fin.is_open()) return nullptr;
+
+    // check for PNG signature
+    if (fin.peek() != 0x89) {
+      cout << "Packing PNG Failed: " << fin.peek() << " != 89" << endl;
+      return nullptr;
+    }
+
+    while (fin) {
+      string cur_line;
+      getline(fin, cur_line);
+      this->append_message(cur_line, LF);
+    }
+
+    return this;
   }
 
   string get_content() {
