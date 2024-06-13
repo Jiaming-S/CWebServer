@@ -13,7 +13,7 @@
 using namespace std;
 
 #define QUEUE_LIMIT 5
-#define TICK_LIMIT 600
+#define TICK_LIMIT 1000
 #define RECV_BUFFER_SIZE 2048
 
 bool SIG_RECEIVED = false;
@@ -110,7 +110,7 @@ struct webserver {
       if (req_method != "GET" || req_target.length() <= 0) response_string = "HTTP/1.1 400 Bad Request";
       else {
         response_string = "HTTP/1.1 200 OK\n";
-        response_string.append("Content-Type: " + request_to_filetype[req_target] + "\n");
+        response_string.append("Content-Type: " + request_to_filetype[req_target] + "\n\n");
         response_string.append(request_to_content[req_target] + "\n");
       }
 
