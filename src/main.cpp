@@ -19,8 +19,8 @@ int main () {
   cout << "Instantiating Server..." << endl;
   struct webserver* server = new webserver(SERVER_PORT);
 
-  cout << "Setting Up Mappings..." << endl;
-  server->setup(MAPPING_FILE_DIR, WEBSITE_FOLDER_DIR);
+  cout << "Loading Webpage Mappings and Files..." << endl;
+  server->load(MAPPING_FILE_DIR, WEBSITE_FOLDER_DIR);
 
   cout << "Starting Server..." << endl;
   server->start();
